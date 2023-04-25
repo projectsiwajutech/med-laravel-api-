@@ -1,7 +1,9 @@
 <?php
 
 namespace App\Http\Controllers\Api;
-
+use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
+use Exception;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Services\OperationService;
@@ -23,7 +25,7 @@ class AuthController extends Controller
      public function registerUser(Request $request)
      {
          try {
-             $rData = $request->only(["last_name","first_name", "phone_number","password","role_id","name_company","ifu", 'fcm_api_token']);
+             $rData = $request->only(["last_name","first_name", "phone_number","password","role_id","specialite","allergie", 'antecedent']);
              
              $validator = [
                  'last_name' => ['required'],
@@ -31,9 +33,9 @@ class AuthController extends Controller
                  'phone_number' => ['required', 'unique:profils,telephone' ],
                  'password' => ['required'],
                  'role_id' => ['required','exists:roles,id'],
-                 'name_company' => ['nullable'],
-                 'ifu' => ['nullable'],
-                 'fcm_api_token' => ['nullable'],
+                 'specialite' => ['nullable'],
+                 'allergie' => ['nullable'],
+                 'antecedent' => ['nullable'],
  
                 
              ];
@@ -57,24 +59,24 @@ class AuthController extends Controller
              $phone_number= $rData["phone_number"];
              $password= $rData["password"];
              $role= $rData["role_id"];
-             if(isset($rData["name_company"])){
-                 $nom_entreprise= $rData["name_company"];
+             if(isset($rData["specialite"])){
+                 $specialite= $rData["specialite"];
  
              }
-             $nom_entreprise= null;
-             if(isset($rData["ifu"])){
-                 $ifu= $rData["ifu"];
+             $specialite= null;
+             if(isset($rData["allergie"])){
+                 $allergie= $rData["allergie"];
  
              }
-             $ifu= null;
-             if(isset($rData["fcm_api_token"])){
-                 $token= $rData["fcm_api_token"];
+             $allergie= null;
+             if(isset($rData["antecedent"])){
+                 $antecedent= $rData["antecedent"];
  
              }
-             $token= null;
+             $antecedent= null;
             
              //do operation
-              $this->_authService->registerUser($lastName, $firstName,$email_address, $phone_number,$password,$role, $nom_entreprise, $ifu, $token);
+              $this->_authService->registerUser($lastName, $firstName,$email_address, $phone_number,$password,$role, $specialite, $allergie, $antecedent);
  
            
              //check on data
@@ -83,7 +85,7 @@ class AuthController extends Controller
              return response()->json([
                  'data' => "",
                  'status' => "success",  'message' => "Le compte a été créé avec succès",
-             ], Response::HTTP_CREATED);
+             ],200);
  
          } catch (Exception $ex) {
             
