@@ -9,10 +9,10 @@ use Illuminate\Support\Facades\Log;
 use Exception;
 
 class OperationService {
-    protected  OperationRepository $_authRepository;
-    public function __construct( OperationRepository $authRepository)
+    protected  OperationRepository $_operationRepository;
+    public function __construct( OperationRepository $operationRepository)
 {
-   $this->_authRepository=$authRepository;
+   $this->_operationRepository=$operationRepository;
    
 }
 
